@@ -39,6 +39,7 @@ th, td { border-width: 1px; padding: 0.5em; position: relative; text-align: left
 th, td { border-radius: 0.25em; border-style: solid; }
 th { background: #EEE; border-color: #BBB; }
 td { border-color: #DDD; }
+textarea { border-radius: 0.25em; }
 
 /* page */
 
@@ -59,8 +60,19 @@ header button {  width: 150px; height: 2em; border-style: solid; border-width: 1
 .features {
     float: right;
 }
-.dropbtn { width: 150px; height: 2em; border-style: solid; border-width: 1px; }
 
+.download_btn{
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 0.25em;
+}
+
+.download_btn:hover{ background-color: #113CFC}
+
+.dropbtn { width: 150px; height: 2em; border-style: solid; border-width: 1px; background-color: white}
+.dropbtn:hover{background-color: #f9f9f9;}
 .dropdown { position: relative; display: inline-block; margin-top: 10px}
 
 .dropdown-content {
@@ -74,6 +86,7 @@ header button {  width: 150px; height: 2em; border-style: solid; border-width: 1
 
 .dropdown-content p {
     color: black;
+    font-size: 0.9em;
     padding: 5px;
     text-decoration: none;
     display: block;
@@ -107,16 +120,16 @@ table.meta:after, table.balance:after { clear: both; content: ""; display: table
 
 /* table meta */
 
-table.meta th { width: 40%; }
+table.meta th { width: 40%; text-align: center; padding: 0.8em 0 0 0;}
 table.meta td { width: 60%; }
-table.meta input { width: 100%}
+table.meta input { width: 100%; padding: 0.3em; }
 
 /* table items */
 
 table.inventory { clear: both; width: 100%; }
 table.inventory th { font-weight: bold; text-align: center; }
 
-table.inventory input { width: 100%;}
+table.inventory input { width: 100%; background-color: white; padding: 0.2em}
 
 /* table balance */
 
@@ -127,6 +140,42 @@ table.balance td { text-align: right; }
 
 aside h1 { border: none; border-width: 0 0 1px; margin: 0 0 1em; }
 aside h1 { border-color: #999; border-bottom-style: solid; }
+aside p { font-weight: lighter; font-size: medium; text-align: left; margin: 0 .3em; padding: 0 0.5em}
+aside:after { clear: both; content: ""; display: table; }
+.additional {
+    padding: 0.3em 0;
+    width: 60%;
+    float: left; font-size: 125%; font-weight: bold;
+}
+
+aside textarea {
+    padding: 0.4em; margin: 0.8em 0; border-style: solid; border-width: thin; resize: none;
+    font-size: 0.7em; font-weight: normal; width: 90%; height: 50%;
+}
+
+.bill { float: right;}
+
+.bill_details{
+    margin: 1em 0;
+
+}
+
+.bill p{ float: left; }
+
+.bill input {
+    float: right;
+    border-style: solid; border-width: 0.1em; padding: 0.3em; text-align: center; border-radius: 0.25em;
+}
+
+.bill strong{ float: right;}
+
+.bill i {float: right; padding: 0.2em; color: #1ba94c;}
+
+/*.discount, .shipping { padding: 0.2em; color: #1ba94c;}*/
+/*.discount{float: right;}*/
+/*.shipping{float: right;}*/
+
+.bill i:hover { color: darkgreen}
 
 /* javascript */
 
@@ -143,26 +192,51 @@ aside h1 { border-color: #999; border-bottom-style: solid; }
 
 .add, .cut
 {
-    background: #9AF;
+    background: DodgerBlue;
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     background-image: -moz-linear-gradient(#00ADEE 5%, #0078A5 100%);
     background-image: -webkit-linear-gradient(#00ADEE 5%, #0078A5 100%);
     border-radius: 0.5em;
-    border-color: #0076A3;
+    border-color: DodgerBlue;
     color: #FFF;
     cursor: pointer;
     font-weight: bold;
     text-shadow: 0 -1px 2px rgba(0,0,0,0.333);
 }
 
-.add { margin: -2.5em 0 0; }
+/* my custom */
+.add {
+    margin: -2.5em 2.5em 0;
+}
 
-.add:hover { background: #00ADEE; }
+.cut{
+    margin: -2.5em 0 0;
+}
 
-.cut { opacity: 0; position: absolute; top: 0; left: -1.5em; }
-.cut { -webkit-transition: opacity 100ms ease-in; }
 
-tr:hover .cut { opacity: 1; }
+/*.add { margin: -2.5em 0 0; }*/
+
+.add:hover { background: #113CFC; }
+
+/*.cut { opacity: 0; position: absolute; top: 0; left: -1.5em; }*/
+/*.cut { -webkit-transition: opacity 100ms ease-in; }*/
+
+/*tr:hover .cut { opacity: 1; }*/
+
+
+.submit{
+    background-color: DodgerBlue;
+    border-radius: 0.25em;
+    border: none;
+    color: white;
+    padding: 8px 30px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.submit:hover{
+    background-color: #113CFC;
+}
 
 @media print {
     * { -webkit-print-color-adjust: exact; }
@@ -184,4 +258,5 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+    margin: 0;
 }
