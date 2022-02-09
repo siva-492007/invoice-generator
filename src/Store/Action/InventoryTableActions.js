@@ -1,33 +1,30 @@
-
-
-export const AddIndex = (id) => {
+export const AddRow = (newRowObj) => {
     return dispatch => {
-        dispatch({type: "ADD_INDEX", value: id})
+        dispatch({type: "ADD_ROW", value: newRowObj})
     }
 }
 
-export const UpdateItem = (value) => {
+export const DeleteRow = () => {
     return dispatch => {
-        dispatch({type: "UPDATE_ITEM", value: value})
+        dispatch({type: "DELETE_ROW"})
     }
 }
 
-export const UpdateQuantity = (value) => {
-    console.log(typeof value)
+export const UpdateItem = (index, value) => {
     return dispatch => {
-        dispatch({type: "UPDATE_QUANTITY", value: value})
+        dispatch({type: "UPDATE_ITEM", index: index, value: value})
     }
 }
 
-export const UpdateRate = (value) => {
-    console.log(typeof value)
+export const UpdateQuantity = (index, value) => {
     return dispatch => {
-        dispatch({type: "UPDATE_RATE", value: value})
+        dispatch({type: "UPDATE_QUANTITY", index: index, value: value})
     }
 }
 
-export const UpdateTotalPrice = () => {
+export const UpdateRate = (index, value) => {
     return dispatch => {
-        dispatch({type: "UPDATE_TOTAL_PRICE"})
+        dispatch({type: "UPDATE_RATE", index: index, value: value})
     }
 }
+
