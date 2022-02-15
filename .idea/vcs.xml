@@ -2,7 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../../../Developer/Web app/zero-to-hero full stack/practise/smart-brain/smart-brain-api-master" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../../../Developer/Web app/zero-to-hero full stack/practise/smart-brain/smart-brain-master" vcs="Git" />
   </component>
 </project>

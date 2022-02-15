@@ -128,24 +128,18 @@ export const InvoiceGenerator = () => {
 
     const handleSubmit = () => {
         const url = 'https://postgateway.herokuapp.com/gateway/'
-        const body = dataToSubmit
-        const config = {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                // "Access-Control-Allow-Origin": "*",
-            }
-        }
         fetch(url, {
             method: 'post',
-            headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            body: JSON.stringify(body)
-        })
+            mode: "no-cors",
+            body: JSON.stringify(dataToSubmit),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Accept': '*/*'
+            }
+            })
             .then(res => console.log("res", res))
             .catch(err => console.log("err", err))
-        
-        // axios.post(url, body, config)
-        //     .then(res => console.log("successfully submitted: ", res))
-        //     .catch(err => console.log("Submission Failed:", err))
     }
 
 
