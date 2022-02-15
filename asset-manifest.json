@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/siva-492007/invoice-generator/static/css/main.c3266fa2.css",
+    "main.js": "/siva-492007/invoice-generator/static/js/main.6da4f926.js",
+    "static/js/787.408dc359.chunk.js": "/siva-492007/invoice-generator/static/js/787.408dc359.chunk.js",
+    "index.html": "/siva-492007/invoice-generator/index.html",
+    "main.c3266fa2.css.map": "/siva-492007/invoice-generator/static/css/main.c3266fa2.css.map",
+    "main.6da4f926.js.map": "/siva-492007/invoice-generator/static/js/main.6da4f926.js.map",
+    "787.408dc359.chunk.js.map": "/siva-492007/invoice-generator/static/js/787.408dc359.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c3266fa2.css",
+    "static/js/main.6da4f926.js"
+  ]
+}
