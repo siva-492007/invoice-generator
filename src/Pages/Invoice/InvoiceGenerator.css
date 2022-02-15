@@ -15,7 +15,9 @@
 
 /* heading */
 
-h1 { font: bold 100% sans-serif; letter-spacing: 0.5em; text-align: center; text-transform: uppercase; }
+header input { font: bold 100% sans-serif; letter-spacing: 0.5em; text-align: center; text-transform: uppercase;
+                background: #000; border-radius: 0.25em; color: #FFF; margin: 0 0 1em; padding: 0.5em 0; width: 100%;
+}
 
 /* table */
 
@@ -25,7 +27,6 @@ th, td { border-width: 1px; padding: 0.5em; position: relative; text-align: left
 th, td { border-radius: 0.25em; border-style: solid; }
 th { background: #EEE; border-color: #BBB;}
 
-/*.meta th { border-width: 0.01em; padding: 0.1em;   text-align: left;  border-color: #BBB; font-weight: bolder}*/
 td { border-color: #DDD; }
 textarea { border-radius: 0.25em; }
 
@@ -131,7 +132,6 @@ table.balance td { text-align: right; }
 
 aside h1 { border: none; border-width: 0 0 1px; margin: 0 0 1em; }
 aside h1 { border-color: #999; border-bottom-style: solid; }
-/*aside p { font-weight: lighter; font-size: medium; text-align: left; margin: 0 .3em; padding: 0 0.5em}*/
 aside:after { clear: both; content: ""; display: table; }
 .additional {
     padding: 0.3em 0;
@@ -141,10 +141,11 @@ aside:after { clear: both; content: ""; display: table; }
 
 .additional_input {font-weight: normal; font-size: medium; text-align: left; margin: 0 .9em; padding: 0.2em 0.5em; float: left}
 
-.bill_var {font-weight: lighter; font-size: medium; text-align: left; margin: 0 .3em; padding: 0.3em; float: left; width: 40%}
+.bill_var {font-weight: lighter; font-size: medium; text-align: left; margin: 0 .3em; padding: 0.3em; float: left; width: 38%}
+.bill_var_tax_dis {font-weight: lighter; font-size: medium; text-align: left; margin: 0 .3em; padding: 0.3em; float: left; width: 22%}
+
 .bill_values {border-style: solid; border-width: 0.1em; padding: 0.3em; text-align: center; border-radius: 0.25em; float: right; width: 40%}
 
-/*.bill p {font-weight: lighter; font-size: medium; text-align: left; margin: 0 .3em; padding: 0 0.5em}*/
 
 aside textarea {
     padding: 0.4em; margin: 0.8em 0; border-style: solid; border-width: thin; resize: none;
@@ -158,18 +159,13 @@ aside textarea {
     position: relative;
 }
 
-/*.bill p{ float: left; }*/
-
-/*.bill input {*/
-/*    float: right;*/
-/*    border-style: solid; border-width: 0.1em; padding: 0.3em; text-align: center; border-radius: 0.25em;*/
-/*}*/
-
-.bill strong{ float: right;}
+.bill strong{ float: right; padding: 0.3em;}
 
 .bill i {float: right; padding: 0.2em; color: #1ba94c;}
 
 .bill i:hover { color: darkgreen}
+
+.options{  padding: 0.3em; margin: 0.3em}
 
 /* javascript */
 

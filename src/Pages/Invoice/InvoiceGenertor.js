@@ -9,27 +9,29 @@ import {
     UpdateRate
 } from "../../Store/Action/InventoryTableActions"
 import {useDispatch, useSelector} from "react-redux";
+import axios from 'axios';
 
 export const InvoiceGenerator = () => {
 
+    const [heading, setHeading] = useState("INVOICE")
     const [invoiceVar, setInvoiceVar] = useState("INVOICE #")
     const [dateVar, setDateVar] = useState("Date")
-    const [paymentTermsVar, setPaymentTermsVar] = useState("Payment Term")
-    const [dueDateVar, setDueDateVar] = useState("Due Date")
-    const [poNumVar, setPoNumVar] = useState("PO Number")
+    const [paymentTermsVar, setPaymentTermsVar] = useState("PaymentTerm")
+    const [dueDateVar, setDueDateVar] = useState("DueDate")
+    const [poNumVar, setPoNumVar] = useState("PONumber")
     const [itemVar, setItemVar] = useState("Item")
     const [quantityVar, setQuantityVar] = useState("Quantity")
     const [rateVar, setRateVar] = useState("Rate")
     const [totalPriceVar, setTotalPriceVar] = useState("Total")
     const [notesVar, setNotesVar] = useState("Notes")
     const [termsVar, setTermsVar] = useState("Terms")
-    const [subTotalVar, setSubTotalVar] = useState("Sub Total")
+    const [subTotalVar, setSubTotalVar] = useState("SubTotal")
     const [taxVar, setTaxVar] = useState("Tax ")
-    const [discountVar, setDiscountVar] = useState("Discount ")
-    const [shippingAmtVar, setShippingAmtVar] = useState("Shipping ")
-    const [taxedTotalVar, setTaxedTotalVar] = useState("Total")
+    const [discountVar, setDiscountVar] = useState("Discount")
+    const [shippingAmtVar, setShippingAmtVar] = useState("Shipping")
+    const [taxedTotalVar, setTaxedTotalVar] = useState("FinalTotal")
     const [paidVar, setPaidVar] = useState("Paid")
-    const [balanceVar, setBalanceVar] = useState("Balance Due")
+    const [balanceVar, setBalanceVar] = useState("BalanceDue")
 
 
     const [invoice, setInvoice] = useState(0);
@@ -46,7 +48,9 @@ export const InvoiceGenerator = () => {
     const [addDiscount, setAddDiscount] = useState(false)
     const [addShipping, setAddShipping] = useState(false)
     const [tax, setTax] = useState(0)
+    const [taxMode, setTaxMode] = useState("percentage")
     const [discount, setDiscount] = useState(0)
+    const [discountMode, setDiscountMode] = useState("percentage")
     const [shippingAmt, setShippingAmt] = useState(0)
     const [paidAmt, setPaidAmt] = useState(0)
 
@@ -54,8 +58,34 @@ export const InvoiceGenerator = () => {
 
     const inventoryData = useSelector(state => state.inventoryTable.tableData)
     const subTotal = inventoryData.reduce((total, currentVal) => total = total + currentVal.totalPrice, 0)
-    let taxedTotal = (subTotal*(1 + tax/100) - discount*(1 + discount/100) + shippingAmt).toFixed(2)
-    let balanceDue = (taxedTotal - paidAmt).toFixed(2)
+
+    let taxedTotal = null
+    let discountedTotal = null
+    let balanceDue = null
+
+    if(taxMode === "percentage" && discountMode === "percentage") {
+        taxedTotal = subTotal * (1 + tax/100)
+        discountedTotal = taxedTotal * (1 - discount/100) + shippingAmt
+        balanceDue = (discountedTotal - paidAmt).toFixed(2)
+    }
+
+    if(taxMode === 'flat' && discountMode === 'flat') {
+        taxedTotal = subTotal + tax
+        discountedTotal = taxedTotal - discount + shippingAmt
+        balanceDue = (discountedTotal - paidAmt).toFixed(2)
+    }
+
+    if(taxMode === 'flat' && discountMode === 'percentage') {
+        taxedTotal = subTotal + tax
+        discountedTotal = taxedTotal * (1 - discount/100)+ shippingAmt
+        balanceDue = (discountedTotal - paidAmt).toFixed(2)
+    }
+
+    if(taxMode === 'percentage' && discountMode === 'flat') {
+        taxedTotal = subTotal*(1 + tax/100)
+        discountedTotal = taxedTotal - discount+ shippingAmt
+        balanceDue = (discountedTotal - paidAmt).toFixed(2)
+    }
 
     const newRowObject = {
         id: inventoryData.length+1,
@@ -65,6 +95,30 @@ export const InvoiceGenerator = () => {
         totalPrice: null
     }
 
+    const dataToSubmit = {
+        FromAddress: fromAddress,
+        ToAddress: toAddress,
+        ShipAddress: shipAddress,
+        Invoice: invoice,
+        [dateVar]: date,
+        [paymentTermsVar]: paymentTerms,
+        [dueDateVar]: dueDate,
+        [poNumVar]: poNum,
+        table: inventoryData,
+        [notesVar]: notes,
+        [termsVar]: terms,
+        [subTotalVar]: subTotal,
+        taxMode: taxMode,
+        [taxVar]: tax,
+        discountMode: discountMode,
+        [discountVar]:discount,
+        [shippingAmtVar]: shippingAmt,
+        [taxedTotalVar]: discountedTotal,
+        [paidVar]: paidAmt,
+        [balanceVar]: balanceDue
+    }
+
+
     const handleAddRow = () => dispatch(AddRow(newRowObject))
     const handleDeleteRow = () => dispatch(DeleteRow())
 
@@ -72,10 +126,26 @@ export const InvoiceGenerator = () => {
     const handleUpdateQuantity = (index, quantity) => dispatch(UpdateQuantity(index, Number(quantity)))
     const handleUpdateRate = (index, rate) => dispatch(UpdateRate(index, Number(rate)))
 
+    const handleSubmit = () => {
+        const url = 'https://postgateway.herokuapp.com/gateway/'
+        const body = dataToSubmit
+        const config = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+            }
+        }
+        console.log(body, config)
+        axios.post(url, body, config)
+            .then(res => console.log("successfully submitted: ", res))
+            .catch(err => console.log("Submission Failed:", err))
+    }
+
+
     return(
         <div>
             <header>
-                <h1>Invoice</h1>
+                <input value={heading} type="text" onChange={event => setHeading(event.target.value)}/>
                 <div className="features">
                     <button type="button" className="download_btn" onClick={()=>window.print()}>Download Invoice</button> <br/>
                     <div className="dropdown">
@@ -86,7 +156,6 @@ export const InvoiceGenerator = () => {
                             <p onClick={() => setCurrency("EUR")}>EUR</p>
                         </div>
                     </div>
-                    {/*</select>*/}
                 </div>
                 <div className="logo">
                     <Logo />
@@ -115,7 +184,7 @@ export const InvoiceGenerator = () => {
                         <td>
                             <input type="number" placeholder="Invoice number"
                                    min="0"
-                                   onChange={(event => setInvoice(event.target.value))}
+                                   onChange={(event => setInvoice(Number(event.target.value)))}
                             />
                         </td>
                     </tr>
@@ -148,10 +217,10 @@ export const InvoiceGenerator = () => {
                 <table className="inventory" id="inventory">
                     <thead>
                     <tr>
-                        <th width="50%"><input className="inventory_th" value={itemVar} type="text" onChange={(event => setItemVar(event.target.value))}/></th>
-                        <th><input className="inventory_th" value={quantityVar} type="text" onChange={(event => setQuantityVar(event.target.value))}/></th>
-                        <th><input className="inventory_th" value={rateVar} type="text" onChange={(event => setRateVar(event.target.value))}/></th>
-                        <th><input className="inventory_th" value={totalPriceVar} type="text" onChange={(event => setTotalPriceVar(event.target.value))}/> </th>
+                        <th width="50%"><input className="inventory_th" value={itemVar} type="text" onChange={(event => setItemVar(event.target.value))} disabled={true}/></th>
+                        <th><input className="inventory_th" value={quantityVar} type="text" onChange={(event => setQuantityVar(event.target.value))} disabled={true}/></th>
+                        <th><input className="inventory_th" value={rateVar} type="text" onChange={(event => setRateVar(event.target.value))} disabled={true}/></th>
+                        <th><input className="inventory_th" value={totalPriceVar} type="text" onChange={(event => setTotalPriceVar(event.target.value))} disabled={true}/> </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -192,18 +261,25 @@ export const InvoiceGenerator = () => {
                     <input className="additional_input" type="text" value={termsVar} onChange={event => setTermsVar(event.target.value)}/>
                     <textarea id="terms"  placeholder="Terms and Conditions - late fee, payment methods, delivery schedule" onChange={(event)=> setTerms(event.target.value)}/>
                 </div>
-
                 <div className="bill">
                     <div className="bill_details"><input className="bill_var" value={subTotalVar} type="text" onChange={event => setSubTotalVar(event.target.value)}/> <strong>{currency} {subTotal}</strong> </div> <br/>
                     <div className="bill_details">
-                        <input className="bill_var" value={taxVar} type="text" onChange={event => setTaxVar(event.target.value)}/>
+                        <input className="bill_var_tax_dis" value={taxVar} type="text" onChange={event => setTaxVar(event.target.value)}/>
+                        <select className="options" name="tax">
+                            <option value="percentage" onClick={(event)=> setTaxMode(event.target.value)}>%</option>
+                            <option value="flat" onClick={(event)=> setTaxMode(event.target.value)}>Flat</option>
+                        </select>
                         <input className="bill_values" type="number" name="tax" required={true} onChange={(event)=>setTax(Number(event.target.value))}/>
-                    </div> <br/>
+                    </div>
 
                     <div className="bill_details">
 
                         { addDiscount && <>
-                            <input className="bill_var" value={discountVar} type="text" onChange={event => setDiscountVar(event.target.value)}/>
+                            <input className="bill_var_tax_dis" value={discountVar} type="text" onChange={event => setDiscountVar(event.target.value)}/>
+                            <select className="options" name="discount">
+                                <option value="percentage" onClick={(event)=> setDiscountMode(event.target.value)}>%</option>
+                                <option value="flat" onClick={(event)=> setDiscountMode(event.target.value)}>Flat</option>
+                            </select>
                             <input className="bill_values" type="number" name="discount" required={true} onChange={(event) => setDiscount(Number(event.target.value))}/>
                             <br/>
                             </>
@@ -224,8 +300,8 @@ export const InvoiceGenerator = () => {
                     </div>
                     { (!addDiscount || !addShipping) && <br/> }
                     <div className="bill_details">
-                        <input className="bill_var" value={taxedTotalVar} type="text"/>
-                        <strong>{currency} {taxedTotal}</strong>
+                        <input className="bill_var" value={taxedTotalVar} type="text" onChange={event => setTaxedTotalVar(event.target.value)}/>
+                        <strong>{currency} {discountedTotal}</strong>
                     </div>
                     <br/>
                     <div className="bill_details">
@@ -240,7 +316,7 @@ export const InvoiceGenerator = () => {
                 </div>
             </aside>
             <br/>
-            <button className="submit" onChange={()=>console.log("submitted")}>Submit</button>
+            <button className="submit" onClick={()=>handleSubmit()}>Submit</button>
         </div>
     )
 }
