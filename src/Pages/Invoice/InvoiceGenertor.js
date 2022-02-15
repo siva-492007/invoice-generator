@@ -12,6 +12,26 @@ import {useDispatch, useSelector} from "react-redux";
 
 export const InvoiceGenerator = () => {
 
+    const [invoiceVar, setInvoiceVar] = useState("INVOICE #")
+    const [dateVar, setDateVar] = useState("Date")
+    const [paymentTermsVar, setPaymentTermsVar] = useState("Payment Term")
+    const [dueDateVar, setDueDateVar] = useState("Due Date")
+    const [poNumVar, setPoNumVar] = useState("PO Number")
+    const [itemVar, setItemVar] = useState("Item")
+    const [quantityVar, setQuantityVar] = useState("Quantity")
+    const [rateVar, setRateVar] = useState("Rate")
+    const [totalPriceVar, setTotalPriceVar] = useState("Total")
+    const [notesVar, setNotesVar] = useState("Notes")
+    const [termsVar, setTermsVar] = useState("Terms")
+    const [subTotalVar, setSubTotalVar] = useState("Sub Total")
+    const [taxVar, setTaxVar] = useState("Tax ")
+    const [discountVar, setDiscountVar] = useState("Discount ")
+    const [shippingAmtVar, setShippingAmtVar] = useState("Shipping ")
+    const [taxedTotalVar, setTaxedTotalVar] = useState("Total")
+    const [paidVar, setPaidVar] = useState("Paid")
+    const [balanceVar, setBalanceVar] = useState("Balance Due")
+
+
     const [invoice, setInvoice] = useState(0);
     const [date, setDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);
@@ -91,7 +111,7 @@ export const InvoiceGenerator = () => {
                 </address>
                 <table className="meta">
                     <tr>
-                        <th>INVOICE #</th>
+                        <th><input className="meta_th" value={invoiceVar} type="text" disabled={true}/></th>
                         <td>
                             <input type="number" placeholder="Invoice number"
                                    min="0"
@@ -102,22 +122,22 @@ export const InvoiceGenerator = () => {
                     <br />
                     <br />
                     <tr>
-                        <th>Date</th>
+                        <th><input className="meta_th" value={dateVar} type="text" onChange={(event)=>setDateVar(event.target.value)} /></th>
                         <td><input value={date} type="date" onChange={(event => setDate(event.target.value))}/></td>
                     </tr>
                     <tr>
-                        <th>Payment Terms</th>
+                        <th><input className="meta_th" value={paymentTermsVar} type="text" onChange={(event)=>setPaymentTermsVar(event.target.value)} /></th>
                         <td><input type="text" placeholder="Payment Terms"
                                    onChange={(event => setPaymentTerms(event.target.value))}
                             />
                         </td>
                     </tr>
                     <tr>
-                        <th>Due Date</th>
+                        <th><input className="meta_th" value={dueDateVar} type="text" onChange={(event)=>setDueDateVar(event.target.value)} /></th>
                         <td><input type="date" onChange={(event => setDueDate(event.target.value))}/></td>
                     </tr>
                     <tr>
-                        <th>PO Number</th>
+                        <th><input className="meta_th" value={poNumVar} type="text" onChange={(event)=>setPoNumVar(event.target.value)} /></th>
                         <td><input type="number" placeholder="PO number"
                                    min="0"
                                    onChange={(event => setPoNum(Number(event.target.value)))}
@@ -128,10 +148,10 @@ export const InvoiceGenerator = () => {
                 <table className="inventory" id="inventory">
                     <thead>
                     <tr>
-                        <th width="50%">Item</th>
-                        <th>Quantity</th>
-                        <th>Rate ({currency})</th>
-                        <th>Price ({currency})</th>
+                        <th width="50%"><input className="inventory_th" value={itemVar} type="text" onChange={(event => setItemVar(event.target.value))}/></th>
+                        <th><input className="inventory_th" value={quantityVar} type="text" onChange={(event => setQuantityVar(event.target.value))}/></th>
+                        <th><input className="inventory_th" value={rateVar} type="text" onChange={(event => setRateVar(event.target.value))}/></th>
+                        <th><input className="inventory_th" value={totalPriceVar} type="text" onChange={(event => setTotalPriceVar(event.target.value))}/> </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -150,7 +170,7 @@ export const InvoiceGenerator = () => {
                                                onChange={(event => {
                                                    handleUpdateRate(index, event.target.value)
                                                })}/></td>
-                                    <td><input id={item+index} type="number" placeholder="Total Amount"
+                                    <td><input className="totalPrice" id={item+index} type="text" placeholder="Total Amount"
                                                value={inventoryData[index].totalPrice} disabled={true} /></td>
                                 </tr>
                             )
@@ -167,23 +187,34 @@ export const InvoiceGenerator = () => {
             </article>
             <aside>
                 <div className="additional">
-                    <p>Notes</p>
+                    <input className="additional_input" type="text" value={notesVar} onChange={event => setNotesVar(event.target.value)}/>
                     <textarea id="notes"  placeholder="Notes - Any information not already covered" onChange={(event)=> setNotes(event.target.value)}/> <br/>
-                    <p>Terms</p>
+                    <input className="additional_input" type="text" value={termsVar} onChange={event => setTermsVar(event.target.value)}/>
                     <textarea id="terms"  placeholder="Terms and Conditions - late fee, payment methods, delivery schedule" onChange={(event)=> setTerms(event.target.value)}/>
                 </div>
 
                 <div className="bill">
-                    <div className="bill_details"><p>Sub Total</p> <strong>{currency} {subTotal}</strong> </div> <br/>
-                    <div className="bill_details"><p>Tax in <b>%</b></p> <input type="number" name="tax" required={true}
-                                                                                onChange={(event)=>setTax(Number(event.target.value))}/></div> <br/>
+                    <div className="bill_details"><input className="bill_var" value={subTotalVar} type="text" onChange={event => setSubTotalVar(event.target.value)}/> <strong>{currency} {subTotal}</strong> </div> <br/>
+                    <div className="bill_details">
+                        <input className="bill_var" value={taxVar} type="text" onChange={event => setTaxVar(event.target.value)}/>
+                        <input className="bill_values" type="number" name="tax" required={true} onChange={(event)=>setTax(Number(event.target.value))}/>
+                    </div> <br/>
+
                     <div className="bill_details">
 
-                        { addDiscount && <><p>Discount in <b>%</b></p> <input type="number" name="discount" required={true}
-                                                                              onChange={(event) => setDiscount(Number(event.target.value))}/><br/></>}
+                        { addDiscount && <>
+                            <input className="bill_var" value={discountVar} type="text" onChange={event => setDiscountVar(event.target.value)}/>
+                            <input className="bill_values" type="number" name="discount" required={true} onChange={(event) => setDiscount(Number(event.target.value))}/>
+                            <br/>
+                            </>
+                        }
                         { (addDiscount && addShipping) && <br/>}
-                        { addShipping && <><p>Shipping - <strong>{currency}</strong></p> <input type="number" name="shipping" required={true}
-                                                                                                onChange={(event)=> setShippingAmt(Number(event.target.value))}/><br/> </>}
+                        { addShipping && <>
+                            <input className="bill_var" value={shippingAmtVar} type="text" onChange={event => setShippingAmtVar(event.target.value)}/>
+                            <input className="bill_values"  type="number" name="shipping" required={true} onChange={(event)=> setShippingAmt(Number(event.target.value))}/>
+                            <br/>
+                            </>
+                        }
 
                         { (addDiscount || addShipping) && <br/>}
 
@@ -192,13 +223,23 @@ export const InvoiceGenerator = () => {
 
                     </div>
                     { (!addDiscount || !addShipping) && <br/> }
-                    <div className="bill_details"><p>Total</p> <strong>{currency} {taxedTotal}</strong></div> <br/>
-                    <div className="bill_details"><p>Paid - <strong>{currency}</strong> </p><input type="number" name="bill" required={true}
-                                                                                                   onChange={ (event) => setPaidAmt(Number(event.target.value))}/> </div><br/>
-                    <div className="bill_details"><p>Balance Due</p> <strong>{currency} {balanceDue}</strong> </div>
+                    <div className="bill_details">
+                        <input className="bill_var" value={taxedTotalVar} type="text"/>
+                        <strong>{currency} {taxedTotal}</strong>
+                    </div>
+                    <br/>
+                    <div className="bill_details">
+                        <input className="bill_var" value={paidVar} type="text" onChange={event => setPaidVar(event.target.value)}/>
+                        <input className="bill_values" type="number" name="bill" required={true} onChange={ (event) => setPaidAmt(Number(event.target.value))}/>
+                    </div>
+                    <br/>
+                    <div className="bill_details">
+                        <input className="bill_var" value={balanceVar} type="text" onChange={event => setBalanceVar(event.target.value)}/>
+                        <strong>{currency} {balanceDue}</strong>
+                    </div>
                 </div>
             </aside>
-
+            <br/>
             <button className="submit" onChange={()=>console.log("submitted")}>Submit</button>
         </div>
     )
