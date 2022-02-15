@@ -132,13 +132,20 @@ export const InvoiceGenerator = () => {
         const config = {
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
-                "Access-Control-Allow-Origin": "*",
+                // "Access-Control-Allow-Origin": "*",
             }
         }
-        console.log(body, config)
-        axios.post(url, body, config)
-            .then(res => console.log("successfully submitted: ", res))
-            .catch(err => console.log("Submission Failed:", err))
+        fetch(url, {
+            method: 'post',
+            headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+            body: JSON.stringify(body)
+        })
+            .then(res => console.log("res", res))
+            .catch(err => console.log("err", err))
+        
+        // axios.post(url, body, config)
+        //     .then(res => console.log("successfully submitted: ", res))
+        //     .catch(err => console.log("Submission Failed:", err))
     }
 
 

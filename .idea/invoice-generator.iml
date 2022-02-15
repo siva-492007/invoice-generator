@@ -8,6 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Gigacode" />
+    <orderEntry type="module" module-name="smart-brain-master" />
+    <orderEntry type="module" module-name="smart-brain-api-master" />
   </component>
 </module>
