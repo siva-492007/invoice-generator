@@ -130,7 +130,7 @@ export const InvoiceGenerator = () => {
         const url = 'https://postgateway.herokuapp.com/gateway/'
         fetch(url, {
             method: 'post',
-            mode: "no-cors",
+            // mode: "no-cors",
             body: JSON.stringify(dataToSubmit),
             headers: {
                 'Content-Type': 'application/json',
