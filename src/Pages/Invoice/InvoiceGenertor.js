@@ -9,7 +9,6 @@ import {
     UpdateRate
 } from "../../Store/Action/InventoryTableActions"
 import {useDispatch, useSelector} from "react-redux";
-import axios from 'axios';
 
 export const InvoiceGenerator = () => {
 
@@ -53,6 +52,7 @@ export const InvoiceGenerator = () => {
     const [discountMode, setDiscountMode] = useState("percentage")
     const [shippingAmt, setShippingAmt] = useState(0)
     const [paidAmt, setPaidAmt] = useState(0)
+    const [url, setUrl] = useState(null);
 
     const dispatch = useDispatch();
 
@@ -65,25 +65,25 @@ export const InvoiceGenerator = () => {
 
     if(taxMode === "percentage" && discountMode === "percentage") {
         taxedTotal = subTotal * (1 + tax/100)
-        discountedTotal = taxedTotal * (1 - discount/100) + shippingAmt
+        discountedTotal = (taxedTotal * (1 - discount/100) + shippingAmt).toFixed(2)
         balanceDue = (discountedTotal - paidAmt).toFixed(2)
     }
 
     if(taxMode === 'flat' && discountMode === 'flat') {
         taxedTotal = subTotal + tax
-        discountedTotal = taxedTotal - discount + shippingAmt
+        discountedTotal = (taxedTotal - discount + shippingAmt).toFixed(2)
         balanceDue = (discountedTotal - paidAmt).toFixed(2)
     }
 
     if(taxMode === 'flat' && discountMode === 'percentage') {
         taxedTotal = subTotal + tax
-        discountedTotal = taxedTotal * (1 - discount/100)+ shippingAmt
+        discountedTotal = (taxedTotal * (1 - discount/100)+ shippingAmt).toFixed(2)
         balanceDue = (discountedTotal - paidAmt).toFixed(2)
     }
 
     if(taxMode === 'percentage' && discountMode === 'flat') {
         taxedTotal = subTotal*(1 + tax/100)
-        discountedTotal = taxedTotal - discount+ shippingAmt
+        discountedTotal = (taxedTotal - discount+ shippingAmt).toFixed(2)
         balanceDue = (discountedTotal - paidAmt).toFixed(2)
     }
 
@@ -317,7 +317,14 @@ export const InvoiceGenerator = () => {
                 </div>
             </aside>
             <br/>
-            <button className="submit" onClick={()=>handleSubmit()}>Submit</button>
+            <div className="footer">
+                <p>POST request REST API</p>
+                <input type="text" placeholder="Enter backend API to send invoice" onChange={(event => setUrl(event.target.value))}/>
+                <br/>
+                {console.log(url, dataToSubmit)}
+                <button className="submit" onClick={()=>handleSubmit()}>Submit</button>
+            </div>
+
         </div>
     )
 }
